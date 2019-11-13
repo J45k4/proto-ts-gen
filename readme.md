@@ -1,4 +1,4 @@
-# Proto-ts-gen
+# Proto-ts-gen [![Build Status](https://travis-ci.org/J45k4/proto-ts-gen.svg?branch=master)](https://travis-ci.org/J45k4/proto-ts-gen)
 
 proto-ts-gen generate typescript files from protofiles with pure javascript. Only creates types and nothing else.
 
