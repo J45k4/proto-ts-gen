@@ -1,6 +1,6 @@
 {
   "name": "proto-ts-gen",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "license": "MIT",
   "bin": {
     "proto-ts-gen": "./dist/app.js"
