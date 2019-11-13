@@ -1,0 +1,24 @@
+{
+  "name": "proto-ts-gen",
+  "version": "0.0.2",
+  "bin": {
+    "proto-ts-gen": "./dist/app.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepublish": "npm run build"
+  },
+  "dependencies": {
+    "protobufjs": "^6.8.8"
+  },
+  "devDependencies": {
+    "@types/protobufjs": "^6.0.0",
+    "typescript": "^3.7.2",
+    "ts-node": "^8.5.0",
+    "jasmine": "^3.5.0",
+    "@types/jasmine": "2.8.7"
+  },
+  "files": [
+    "dist"
+  ]
+}
