@@ -1,7 +1,6 @@
-import "source-map-support/register";
-
+#!/usr/bin/env node
 import { OneType, TypesContainer } from "./types";
-import { existsSync, readdirSync, writeFileSync } from "fs";
+import { readdirSync, writeFileSync } from "fs";
 
 import { generateTypes } from "./generation";
 import { join } from "path";
@@ -37,6 +36,10 @@ const files = readdirSync(inputFolder);
 	};
 
 	for (const file of files) {
+		if (!file.endsWith(".proto")) {
+			continue;
+		}
+
 		const filePath = join(inputFolder, file);
 
 		await parseFile(filePath, typesContainer);
