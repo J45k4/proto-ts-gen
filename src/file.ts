@@ -7,7 +7,7 @@ export const parseFile = async (
 ) => new Promise((resolve, reject) => {
     load(filePath, (err, root) => {
         if (err) {
-            console.error("ERROR while loading protofile " + filePath);
+            console.error("ERROR while loading protofile " + filePath, err);
             process.exit(1);
         }
 
