@@ -57,7 +57,7 @@ export const getTypes = (type: Type | Enum, typesContainer: TypesContainer) => {
                     newField.type = "number";
                     break;
                 case "bytes":
-                    newField.type = "string";
+                    newField.type = "Buffer";
                     break;
                 case "string":
                     newField.type = "string";
