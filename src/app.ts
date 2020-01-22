@@ -9,12 +9,18 @@ import { parseFile } from "./file";
 let inputFolder = "";
 let outputFile = "";
 
+const messagesToSkip: string[] = [];
+
 process.argv.forEach(function (arg, index) {
 	if (arg === "-i") {
 		inputFolder = process.argv[index + 1];
 	}
 	if (arg === "-o") {
 		outputFile = process.argv[index + 1];
+	}
+
+	if (arg === "--skip-message") {
+		messagesToSkip.push(process.argv[index + 1]);
 	}
 });
 
@@ -42,7 +48,7 @@ const files = readdirSync(inputFolder);
 
 		const filePath = join(inputFolder, file);
 
-		await parseFile(filePath, typesContainer);
+		await parseFile(filePath, typesContainer, messagesToSkip);
 	}
 
 	const output = generateTypes(typesContainer);

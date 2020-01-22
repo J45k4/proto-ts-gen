@@ -1,10 +1,10 @@
 import { Enum, Namespace, Root, Service, Type } from "protobufjs";
 import { Field, OneType, TypesContainer } from "./types";
 
-export const getTypes = (type: Type | Enum, typesContainer: TypesContainer) => {
+export const getTypes = (type: Type | Enum, typesContainer: TypesContainer, messagesToSkip: string[]) => {
     if (!(type instanceof Type) && type instanceof Namespace) {
         for (const subType of type.nestedArray) {
-            getTypes(subType as Type, typesContainer);
+            getTypes(subType as Type, typesContainer, messagesToSkip);
         }
 
         return;
@@ -20,8 +20,12 @@ export const getTypes = (type: Type | Enum, typesContainer: TypesContainer) => {
     };
 
     if (type instanceof Type) {
+        if (messagesToSkip.includes(type.name)) {
+            return;
+        }
+
         for (const subType of type.nestedArray) {
-            getTypes(subType as Type, typesContainer);
+            getTypes(subType as Type, typesContainer, messagesToSkip);
         }
 
         for (const field of type.fieldsArray) {
@@ -89,12 +93,12 @@ export const getTypes = (type: Type | Enum, typesContainer: TypesContainer) => {
     typesContainer.types.set(type.name, typeDescription);
 }
 
-export const parse = (root: Root, typesContainer: TypesContainer) => {
+export const parse = (root: Root, typesContainer: TypesContainer, messagesToSkip: string[]) => {
     for (const nestedItem of root.nestedArray) {
         if (nestedItem instanceof Service) {
             continue;
         }
 
-        getTypes(nestedItem as Type, typesContainer);
+        getTypes(nestedItem as Type, typesContainer, messagesToSkip);
     }
 }

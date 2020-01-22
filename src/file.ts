@@ -3,7 +3,7 @@ import { load } from "protobufjs";
 import { parse } from "./parse";
 
 export const parseFile = async (
-    filePath: string, typesContainer: TypesContainer
+    filePath: string, typesContainer: TypesContainer, messagesToSkip: string[]
 ) => new Promise((resolve, reject) => {
     load(filePath, (err, root) => {
         if (err) {
@@ -11,7 +11,7 @@ export const parseFile = async (
             process.exit(1);
         }
 
-        parse(root, typesContainer);
+        parse(root, typesContainer, messagesToSkip);
         resolve();
     });
 });
