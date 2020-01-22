@@ -9,7 +9,7 @@ it("generates corrent output", async () => {
         types: new Map<string, OneType>()
     };
 
-    await parseFile("./test-data/test.proto", typesContainer);
+    await parseFile("./test-data/test.proto", typesContainer, []);
 
     const output = generateTypes(typesContainer);
 

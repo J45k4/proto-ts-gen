@@ -11,6 +11,10 @@ enum Flag {
     Last = 1;
 }
 
+message Date {
+    uint64 milliseconds = 1;
+}
+
 message Person {
     uint32 age = 1;
     string name = 2;
