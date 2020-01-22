@@ -56,7 +56,7 @@ export const getTypes = (type: Type | Enum, typesContainer: TypesContainer, mess
                     newField.type = "number";
                     break;
                 case "double":
-                    newField.type = "double";
+                    newField.type = "number";
                 case "int":
                     newField.type = "number";
                     break;
@@ -64,7 +64,9 @@ export const getTypes = (type: Type | Enum, typesContainer: TypesContainer, mess
                     newField.type = "Buffer";
                     break;
                 case "string":
-                    newField.type = "string";
+                    newField.type = "number";
+                case "float":
+                    newField.type = "number";
                     break;
             }
 
