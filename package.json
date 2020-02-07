@@ -1,14 +1,16 @@
 {
-  "name": "proto-ts-gen",
-  "version": "0.2.5",
+  "name": "proto-ts-gen-interfaces",
+  "version": "0.3.0",
   "license": "MIT",
-  "main": "app.js",
+  "main": "./dist/app.js",
   "bin": {
     "proto-ts-gen": "./dist/app.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "test": "jasmine .",
+    "dryrun": "node ./dist/app.js -i test-data"
   },
   "dependencies": {
     "protobufjs": "^6.8.8"

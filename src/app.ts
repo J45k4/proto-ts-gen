@@ -1,60 +1,38 @@
 #!/usr/bin/env node
-import { OneType, TypesContainer } from "./types";
-import { readdirSync, writeFileSync } from "fs";
+import { readdirSync, statSync, writeFileSync } from 'fs';
 
-import { generateTypes } from "./generation";
-import { join } from "path";
-import { parseFile } from "./file";
+import { parseFile } from './file';
 
-let inputFolder = "";
-let outputFile = "";
+let inputFolder = '';
 
 const messagesToSkip: string[] = [];
 
 process.argv.forEach(function (arg, index) {
-	if (arg === "-i") {
+	if (arg === '-i') {
 		inputFolder = process.argv[index + 1];
 	}
-	if (arg === "-o") {
-		outputFile = process.argv[index + 1];
-	}
-
-	if (arg === "--skip-message") {
+	if (arg === '--skip-message') {
 		messagesToSkip.push(process.argv[index + 1]);
 	}
 });
 
 if (!inputFolder) {
-	console.error("inputFolder must be specified");
-	process.exit(1);
+	inputFolder = '.';
 }
 
-if (!outputFile) {
-	console.error("outputFile must be specified");
-	process.exit(1);
-}
-
-const files = readdirSync(inputFolder);
-
-(async function () {
-	const typesContainer: TypesContainer = {
-		types: new Map<string, OneType>()
-	};
-
+async function loadDirectory(currentDirectory: string): Promise<void> {
+	const files = readdirSync(currentDirectory);
 	for (const file of files) {
-		if (!file.endsWith(".proto")) {
-			continue;
+		const filePath = `${currentDirectory}/${file}`;
+		if (statSync(filePath).isDirectory()) {
+			loadDirectory(filePath);
+		} else if (file.endsWith('.proto')) {
+			console.log('PARSE', filePath);
+			await parseFile(filePath, inputFolder, messagesToSkip);
 		}
+	};
+}
 
-		const filePath = join(inputFolder, file);
-
-		await parseFile(filePath, typesContainer, messagesToSkip);
-	}
-
-	const output = generateTypes(typesContainer);
-
-	writeFileSync(outputFile, output, {
-		encoding: "utf8"
-	});
-}());
-
+loadDirectory(inputFolder)
+	.then(() => console.log('Done.'))
+	.catch((err) => console.error(err));
