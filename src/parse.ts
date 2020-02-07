@@ -69,6 +69,9 @@ export const getTypes = (type: Type | Enum, typesContainer: TypesContainer, mess
                 case "float":
                     newField.type = "number";
                     break;
+                case "google.protobuf.Any":
+                    newField.type = "any";
+                    break;
             }
 
             typeDescription.fields.push(newField);
