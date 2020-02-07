@@ -22,10 +22,7 @@ export const parseFile = async (
         var resolved = util.path.resolve(normOrigin, normTarget, true);
         var idx = resolved.lastIndexOf("google/");
         if (idx > -1) {
-            var altname = resolved.substring(idx);
-            if (altname in common) {
-                resolved = altname;
-            }
+            return '';
         }
 
         if (existsSync(resolved)) {
