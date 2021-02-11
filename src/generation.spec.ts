@@ -9,7 +9,7 @@ it("generates corrent output", async () => {
         types: new Map<string, OneType>()
     };
 
-    await parseFile("./test-data/test.proto", typesContainer, []);
+    await parseFile("./test-data/test.proto", './test-data', []);
 
     const output = generateTypes(typesContainer);
 
@@ -28,6 +28,6 @@ export interface Person {
     friends?: Person[];
     type?: PersonType;
     flags?: Flag[];
-}   
+}
 `)
 })

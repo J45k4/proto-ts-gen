@@ -1,6 +1,7 @@
-# proto-ts-gen [![Build Status](https://travis-ci.org/J45k4/proto-ts-gen.svg?branch=master)](https://travis-ci.org/J45k4/proto-ts-gen)
+# proto-ts-gen-interfaces
+proto-ts-gen generate typescript files from protofiles with pure javascript. Only creates interfaces and nothing else.
 
-proto-ts-gen generate typescript files from protofiles with pure javascript. Only creates types and nothing else.
+Creates a name-interfaces.ts file for every name.proto file.
 
 ## Development
 
@@ -13,5 +14,5 @@ npm run build
 
 ```
 npm install -g proto-ts-gen
-proto-ts-gen -i protofilesFolder -o outputFile.ts
+proto-ts-gen -i protofilesFolder
 ```
