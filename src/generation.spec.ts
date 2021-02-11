@@ -1,33 +1,56 @@
 import "source-map-support/register";
 
-import { OneType } from "./types";
-import { generateTypes } from "./generation";
-import { parseFile } from "./file";
+import { convertFileToText, convertToGenerationStructure } from "./generation";
+import { parseDirectory } from "./parsing";
 
 it("generates corrent output", async () => {
-    const typesContainer = {
-        types: new Map<string, OneType>()
-    };
+    const allTypes = await parseDirectory("./test-data", [])
 
-    await parseFile("./test-data/test.proto", './test-data', []);
+    const generation = convertToGenerationStructure(allTypes)
 
-    const output = generateTypes(typesContainer);
+    const generated = []
 
-    expect(output).toBe(`export enum PersonType {
-    CUSTOMER = 0,
-    OWNER = 1,
-    SALES_PERSON = 3
+    for (const [,f] of generation.files) {
+        const o = convertFileToText(f)
+
+        generated.push(o)
+    }
+
+    const first =`export interface Home {
+\taddress?: string;
 }
+
+`
+
+    const second = `import * as bluecow_hyperdrive from "./home"
+
+export enum PersonType {
+\tCUSTOMER = 0,
+\tOWNER = 1,
+\tSALES_PERSON = 3
+}
+
 export enum Flag {
-    First = 0,
-    Last = 1
+\tFirst = 0,
+\tLast = 1
 }
+
+export interface Date {
+\tmilliseconds?: number;
+}
+
 export interface Person {
-    age?: number;
-    name?: string;
-    friends?: Person[];
-    type?: PersonType;
-    flags?: Flag[];
+\tage?: number;
+\tname?: string;
+\tfriends?: Person;
+\ttype?: PersonType;
+\tflags?: Flag;
+\thome?: bluecow_hyperdrive.Home;
 }
-`)
+
+`
+
+    expect(generated[0]).toBe(first)
+
+    expect(generated[1]).toBe(second)
 })

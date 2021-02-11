@@ -1,17 +1,21 @@
-export type TypesContainer = {
-    types: Map<string, OneType>;
-}
 
-export type Field = {
-    name: string;
-    type?: string;
+export interface Field {
+    name: string
+    type?: string
+    typeNamespace?: string
+    typeFilepath?: string
     isListType?: boolean;
     required?: boolean;
     value?: number;
 }
 
-export type OneType = {
-    name: string;
-    isEnum?: boolean;
-    fields: Field[];
+
+export interface FlatType {
+    name: string
+    namespace: string
+    filepath: string
+    isEnum?: boolean
+    fields?: Field[]
 }
+
+export type AllTypes = Map<string, FlatType>

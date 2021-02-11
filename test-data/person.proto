@@ -1,5 +1,9 @@
 syntax = "proto3";
 
+import "home.proto";
+
+package bluecow;
+
 enum PersonType {
     CUSTOMER = 0;
     OWNER = 1;
@@ -21,4 +25,5 @@ message Person {
     repeated Person friends = 3;
     PersonType type = 4;
     repeated Flag flags = 5;
+    bluecow.hyperdrive.Home home = 6;
 }
