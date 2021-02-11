@@ -1,6 +1,6 @@
 {
-  "name": "proto-ts-gen-interfaces",
-  "version": "0.3.1",
+  "name": "proto-ts-gen",
+  "version": "0.3.0",
   "license": "MIT",
   "main": "./dist/app.js",
   "bin": {
