@@ -38,4 +38,13 @@ describe("getRelativePath", () => {
     
         expect(p).toBe("../home")
     })
+
+    it("Works with more complex path", () => {
+        const your = "./test-data/person.proto"
+        const destination = "./home.proto"
+    
+        const p = getRelativePath(your, destination)
+    
+        expect(p).toBe("../home")
+    })
 })

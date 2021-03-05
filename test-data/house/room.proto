@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+message Room {
+    uint32 size = 1;
+}

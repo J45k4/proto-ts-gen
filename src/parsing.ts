@@ -1,16 +1,19 @@
 import { readdirSync, statSync, existsSync } from 'fs';
-import { join } from 'path';
+import { relative } from 'path';
 import { Enum, Namespace, Root, Service, Type, util } from "protobufjs";
 import { AllTypes, Field, FlatType } from "./types";
 
+const invalidPathCharactersRegex = /(\\)|(\.)/g;
+
 export const getTypes = (
+    rootFolderPath: string,
     type: Type | Enum | Namespace, 
     allTypes: Map<string, FlatType>, 
     messagesToSkip: string[]
 ) => {
     if (!(type instanceof Type) && type instanceof Namespace) {
         for (const subType of type.nestedArray) {
-            getTypes(subType as Type, allTypes, messagesToSkip);
+            getTypes(rootFolderPath, subType as Type, allTypes, messagesToSkip);
         }
 
         return;
@@ -21,10 +24,9 @@ export const getTypes = (
     const parts = fullname.split(".")
 
     const name = parts.pop()
-    const namespace = parts.join("_")
 
-    const filepath = type.filename;
-
+    const filepath = relative(rootFolderPath, type.filename);
+    const namespace = filepath.replace(invalidPathCharactersRegex, "_") //.split(".").join("_").split("/").join("_")
 
     // if (typeRepository.hasType(type.filename, type.name)) {
     //     return
@@ -43,7 +45,7 @@ export const getTypes = (
         }
 
         for (const subType of type.nestedArray) {
-            getTypes(subType as Type, allTypes, messagesToSkip);
+            getTypes(rootFolderPath, subType as Type, allTypes, messagesToSkip);
         }
 
         for (const field of type.fieldsArray) {
@@ -80,17 +82,17 @@ export const getTypes = (
     allTypes.set(fullname, flatType);
 }
 
-export const parse = (root: Root, allTypes: AllTypes, messagesToSkip: string[]) => {
+export const parse = (rootFolderPath: string, root: Root, allTypes: AllTypes, messagesToSkip: string[]) => {
     for (const nestedItem of root.nestedArray) {
         if (nestedItem instanceof Service) {
             continue;
         }
 
-        getTypes(nestedItem as Type, allTypes, messagesToSkip);
+        getTypes(rootFolderPath, nestedItem as Type, allTypes, messagesToSkip);
     }
 }
 
-export const parseFile = async (allTypes: AllTypes, filePath: string, messagesToSkip: string[]) => new Promise<void>((resolve, reject) => {
+export const parseFile = async (rootFolderPath: string, allTypes: AllTypes, filePath: string, messagesToSkip: string[]) => new Promise<void>((resolve, reject) => {
     const root = new Root();
     root.resolvePath = function pbjsResolvePath(origin, target) {
         var normOrigin = util.path.normalize(origin);
@@ -115,32 +117,32 @@ export const parseFile = async (allTypes: AllTypes, filePath: string, messagesTo
             process.exit(1);
         }
 
-        parse(root, allTypes, messagesToSkip);
+        parse(rootFolderPath, root, allTypes, messagesToSkip);
 
         resolve();
     });
 })
 
-const parseOneDirectory = async (allTypes: AllTypes, currentDirectory: string, messagesToSkip: string[]) => {
+const parseOneDirectory = async (rootFolderPath: string, allTypes: AllTypes, currentDirectory: string, messagesToSkip: string[]) => {
 	const files = readdirSync(currentDirectory);
 	for (const file of files) {
 		const filePath = `${currentDirectory}/${file}`;
 		if (statSync(filePath).isDirectory()) {
-			parseOneDirectory(allTypes, filePath, messagesToSkip);
+			parseOneDirectory(rootFolderPath, allTypes, filePath, messagesToSkip);
 		} else if (file.endsWith('.proto')) {
 			console.log('PARSE', filePath);
-			await parseFile(allTypes, filePath, messagesToSkip);
+			await parseFile(rootFolderPath, allTypes, filePath, messagesToSkip);
 		}
 	};
 }
 
-export const parseDirectory = async (folderPath: string, messagesToSkip: string[]): Promise<AllTypes> => {
+export const parseDirectory = async (rootFolderPath: string, messagesToSkip: string[]): Promise<AllTypes> => {
     const allTypes: AllTypes = new Map();
 
-    await parseOneDirectory(allTypes, folderPath, messagesToSkip)
+    await parseOneDirectory(rootFolderPath, allTypes, rootFolderPath, messagesToSkip)
 
     for (const [,t] of allTypes) {
-        t.filepath = t.filepath.replace(folderPath.substring(2), "")
+        t.filepath = t.filepath.replace(rootFolderPath.substring(2), "")
     }
 
     return allTypes

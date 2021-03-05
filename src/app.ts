@@ -3,7 +3,7 @@ import { writeFileSync } from 'fs';
 import { convertFileToText, convertToGenerationStructure } from './generation';
 import { parseDirectory } from './parsing';
 import { join } from "path"
-import { ensureDir } from "fs-extra"
+import { ensureDir, ensureFile } from "fs-extra"
 
 let inputFolder = ""
 let outputFolder = ""
@@ -38,18 +38,24 @@ if (!outputFolder) {
     for (const [path,f] of generation.files) {
         const o = convertFileToText(f)
 
-		const parts = path.split("/")
-		parts.pop()
+		const fullFilepath = join(outputFolder, path)
 
-		// const parts = join(outputFolder, path).split("/")
+		console.log("CREATING FILE", path)
+
+		// const parts = path.split("/")
 		// parts.pop()
 
-		await ensureDir(join(outputFolder, parts.join("/")));
+		// // const parts = join(outputFolder, path).split("/")
+		// // parts.pop()
 
-		writeFileSync(join(outputFolder, path), o, {
+		// const outputFileFolderPath = join(outputFolder, parts.join("/"))
+
+		// console.log("OUTPUT FOLDER", outputFileFolderPath)
+
+		await ensureFile(fullFilepath)
+
+		writeFileSync(fullFilepath, o, {
 			encoding: "utf8"
 		})
-
-        console.log(path, f)
     }
 })()

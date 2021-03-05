@@ -1,6 +1,6 @@
 {
   "name": "proto-ts-gen",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "license": "MIT",
   "main": "./dist/app.js",
   "bin": {
@@ -10,7 +10,7 @@
     "build": "tsc -p tsconfig.json",
     "prepublish": "npm run build",
     "test": "jasmine .",
-    "dryrun": "node ./dist/app.js -i test-data"
+    "dryrun": "node ./dist/app.js -i test-data -o test-output"
   },
   "dependencies": {
     "protobufjs": "^6.8.8",

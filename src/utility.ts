@@ -18,7 +18,7 @@ export const getRelativePath = (yourPath: string, destinationPath: string) => {
 
     let y = ""
 
-    if (yourDif == 0) {
+    if (yourDif < 1) {
         y = "./"
     } else {
         for (let x = 0; x < yourDif; x++) {
@@ -30,5 +30,7 @@ export const getRelativePath = (yourPath: string, destinationPath: string) => {
 
     const destPath = s.length ? s.join("/") + "/" : ""
 
-    return y + destPath + destinationFilename
+    const final = y + destPath + destinationFilename
+
+    return final.replace(`\\`, "/")
 }

@@ -1,5 +1,6 @@
 import { AllTypes, Field } from "./types";
 import { getRelativePath } from "./utility";
+import { relative } from "path"
 
 export interface Import {
     path: string
@@ -115,9 +116,11 @@ export const convertToGenerationStructure = (allTypes: AllTypes): Generation  =>
 
             if (fieldType) {
                 if (fieldType.filepath !== type.filepath) {
+                    const relativePath = getRelativePath(type.filepath, fieldType.filepath)
+
                     file.imports.set(fieldType.namespace, {
                         moduleAlias: fieldType.namespace,
-                        path: getRelativePath(type.filepath, fieldType.filepath)
+                        path: relativePath
                     })
 
                     typeName = fieldType.namespace + "." + fieldType.name

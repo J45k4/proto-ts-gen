@@ -1,6 +1,8 @@
 syntax = "proto3";
 
 import "home.proto";
+import "workplace.proto";
+import "house/room.proto";
 
 package bluecow;
 
@@ -26,4 +28,6 @@ message Person {
     PersonType type = 4;
     repeated Flag flags = 5;
     bluecow.hyperdrive.Home home = 6;
+    Workplace workplace = 7;
+    Room room = 8;
 }
