@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+message MakeBurgerRequest {
+    uint32 amount = 1;
+}
+
+message MakeBurgerResponse {
+
+}
+
+service BurgerKing {
+    rpc makeBurger(MakeBurgerRequest) returns(MakeBurgerResponse) {}
+}

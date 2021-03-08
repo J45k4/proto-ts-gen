@@ -1,6 +1,6 @@
 {
   "name": "proto-ts-gen",
-  "version": "0.5.0",
+  "version": "0.6.1",
   "license": "MIT",
   "main": "./dist/app.js",
   "bin": {
@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@types/protobufjs": "^6.0.0",
-    "typescript": "^3.7.2",
+    "typescript": "^4.2.3",
     "ts-node": "^8.5.0",
     "jasmine": "^3.5.0",
     "@types/jasmine": "2.8.7"

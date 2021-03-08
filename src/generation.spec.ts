@@ -43,7 +43,7 @@ export interface Date {
 export interface Person {
 \tage?: number;
 \tname?: string;
-\tfriends?: Person;
+\tfriends?: Person[];
 \ttype?: PersonType;
 \tflags?: Flag;
 \thome?: bluecow_hyperdrive.Home;

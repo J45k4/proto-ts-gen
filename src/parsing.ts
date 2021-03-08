@@ -25,12 +25,16 @@ export const getTypes = (
 
     const name = parts.pop()
 
-    const filepath = relative(rootFolderPath, type.filename);
+    let filepath = relative(rootFolderPath, type.filename);
     const namespace = filepath.replace(invalidPathCharactersRegex, "_") //.split(".").join("_").split("/").join("_")
 
     // if (typeRepository.hasType(type.filename, type.name)) {
     //     return
     // }
+
+    if (!filepath.startsWith("./") && !filepath.startsWith("../")) {
+        filepath = "./" + filepath
+    }
 
     const flatType: FlatType = {
         name: name,
@@ -49,8 +53,6 @@ export const getTypes = (
         }
 
         for (const field of type.fieldsArray) {
-            const name = field.name 
-
             const newField: Field = {
                 name: field.name,
                 type: field.type,
@@ -128,7 +130,7 @@ const parseOneDirectory = async (rootFolderPath: string, allTypes: AllTypes, cur
 	for (const file of files) {
 		const filePath = `${currentDirectory}/${file}`;
 		if (statSync(filePath).isDirectory()) {
-			parseOneDirectory(rootFolderPath, allTypes, filePath, messagesToSkip);
+			await parseOneDirectory(rootFolderPath, allTypes, filePath, messagesToSkip);
 		} else if (file.endsWith('.proto')) {
 			console.log('PARSE', filePath);
 			await parseFile(rootFolderPath, allTypes, filePath, messagesToSkip);

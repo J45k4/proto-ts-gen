@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+message Date {
+    int64 milliseconds = 1;
+}

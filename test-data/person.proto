@@ -2,6 +2,7 @@ syntax = "proto3";
 
 import "home.proto";
 import "workplace.proto";
+import "dog.proto";
 import "house/room.proto";
 
 package bluecow;
@@ -30,4 +31,5 @@ message Person {
     bluecow.hyperdrive.Home home = 6;
     Workplace workplace = 7;
     Room room = 8;
+    Dog dog = 9;
 }

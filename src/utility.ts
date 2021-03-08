@@ -1,5 +1,13 @@
+import { relative } from "path"
 
-export const getRelativePath = (yourPath: string, destinationPath: string) => {
+const invalidPathCharactersRegex = /(\\)/g;
+
+export const getRelativePath = (yourPathOrg: string, destinationPathOrg: string) => {
+    const yourPath = yourPathOrg.replace(invalidPathCharactersRegex, "/")
+    const destinationPath = destinationPathOrg.replace(invalidPathCharactersRegex, "/")
+
+    const r = relative(yourPath, destinationPath)
+
     const yourSplitted = yourPath.split("/")
     yourSplitted.pop()
 

@@ -1,6 +1,5 @@
 import { AllTypes, Field } from "./types";
 import { getRelativePath } from "./utility";
-import { relative } from "path"
 
 export interface Import {
     path: string
@@ -9,7 +8,9 @@ export interface Import {
 
 export interface InterfaceField {
     name: string
-    type: string 
+    type: string
+    required: boolean
+    isListType: boolean
 }
 
 export interface Interface {
@@ -46,6 +47,8 @@ const convertFieldType = (f) => {
         case "uint32":
             return "number";
         case "int64":
+            return "number";
+        case "sint64":
             return "number";
         case "int32":
             return "number";
@@ -126,14 +129,12 @@ export const convertToGenerationStructure = (allTypes: AllTypes): Generation  =>
                     typeName = fieldType.namespace + "." + fieldType.name
                 }
             }
-
-            if (field.isListType) {
-                typeName + "[]"
-            }
             
             interfaceFields.push({
                 type: typeName,
-                name: field.name
+                name: field.name,
+                required: field.required,
+                isListType: field.isListType
             })
         }
 
@@ -148,7 +149,7 @@ export const convertToGenerationStructure = (allTypes: AllTypes): Generation  =>
 
 // import { Field, TypesContainer } from "./types";
 
-export const printInterfaceField = (args: Field) => {
+export const printInterfaceField = (args: InterfaceField) => {
     if (args.isListType) {
         return `${args.name}${!args.required ? "?" : ""}: ${
             args.type
@@ -159,7 +160,7 @@ export const printInterfaceField = (args: Field) => {
 
 export const printInterface = (args: {
     interfaceName: string;
-    interfaceFields: Field[];
+    interfaceFields: InterfaceField[];
 }) => {
     return `export interface ${args.interfaceName} {
 	${args.interfaceFields.map(p => printInterfaceField(p)).join("\n\t")}
@@ -172,7 +173,7 @@ export const printEnumField = (args: Field) => {
 
 export const printEnum = (args: {
     enumName: string;
-    enumFields: Field[];
+    enumFields: EnumField[];
 }) => {
     return `export enum ${args.enumName} {
 	${args.enumFields.map(p => printEnumField(p)).join(",\n\t")}

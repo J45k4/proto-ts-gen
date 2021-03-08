@@ -47,4 +47,22 @@ describe("getRelativePath", () => {
     
         expect(p).toBe("../home")
     })
+
+    it("When you are deeper than your destination", () => {
+        const your = "./home/room"
+        const dst = "./common"
+
+        const p = getRelativePath(your, dst)
+
+        expect(p).toBe("../common")
+    })
+
+    it("When you are deeper than your destination2", () => {
+        const your = "./root/home/room"
+        const dst = "./root/common"
+
+        const p = getRelativePath(your, dst)
+
+        expect(p).toBe("../common")
+    })
 })
